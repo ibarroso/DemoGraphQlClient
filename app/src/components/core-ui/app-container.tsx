@@ -3,14 +3,16 @@ import PageTitle from "components/page-title";
 import React from "react";
 import SearchBar from "components/search-bar";
 import ResultsPanel from "components/results-panel";
-import SearchResult from "types/iSearchResult";
+import CharacterInfo from "types/iCharacterInfo";
 import CharacterPanel from "components/character-panel";
-import { CharacterInfo } from "types/iSingleCharacterSearchResult";
+import { CharacterFullInfo } from "types/iSingleCharacterSearchResult";
 
 export default function AppContainer() {
-  const [searchResults, setSearchResults] = React.useState<SearchResult>(null!);
+  const [searchResults, setSearchResults] = React.useState<CharacterInfo[]>(
+    null!
+  );
   const [characterPanel, setCharacterPanel] = React.useState<boolean>(false);
-  const [characterInfo, setCharacterInfo] = React.useState<CharacterInfo>(
+  const [characterInfo, setCharacterInfo] = React.useState<CharacterFullInfo>(
     null!
   );
 
@@ -25,7 +27,11 @@ export default function AppContainer() {
       >
         <Stack>
           <PageTitle />
-          <SearchBar setSearchResults={setSearchResults} />
+          <SearchBar
+            setSearchResults={setSearchResults}
+            setCharacterPanel={setCharacterPanel}
+            setCharacterInfo={setCharacterInfo}
+          />
           {!characterPanel && (
             <ResultsPanel
               setCharacterPanel={setCharacterPanel}

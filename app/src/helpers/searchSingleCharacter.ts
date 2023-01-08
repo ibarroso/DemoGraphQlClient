@@ -1,11 +1,11 @@
 import SingleCharacterSearchResult, {
-  CharacterInfo,
+  CharacterFullInfo,
 } from "types/iSingleCharacterSearchResult";
 
 export default async function searchSingleCharacter(
   id: string,
   characterName: string
-): Promise<CharacterInfo> {
+): Promise<CharacterFullInfo> {
   var searchResult: SingleCharacterSearchResult = {
     data: { characters: { results: [] } },
   };
@@ -38,7 +38,7 @@ export default async function searchSingleCharacter(
       searchResult = result as SingleCharacterSearchResult;
     });
 
-  var characterData: CharacterInfo[] =
+  var characterData: CharacterFullInfo[] =
     searchResult.data.characters.results.filter((cd) => cd.id === id);
 
   return characterData[0];

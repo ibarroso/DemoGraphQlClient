@@ -1,4 +1,4 @@
-export interface CharacterInfo {
+export interface CharacterFullInfo {
   id: string;
   name: string;
   status: string;
@@ -10,7 +10,7 @@ export interface CharacterInfo {
 }
 
 interface Characters {
-  results: CharacterInfo[];
+  results: CharacterFullInfo[];
 }
 
 interface Data {

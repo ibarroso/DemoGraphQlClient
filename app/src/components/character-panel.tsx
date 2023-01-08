@@ -13,11 +13,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { CharacterInfo } from "types/iSingleCharacterSearchResult";
+import { CharacterFullInfo } from "types/iSingleCharacterSearchResult";
 
 interface Props {
   setCharacterPanel: React.Dispatch<React.SetStateAction<boolean>>;
-  characterInfo: CharacterInfo;
+  characterInfo: CharacterFullInfo;
 }
 
 export default function CharacterPanel({
@@ -46,7 +46,7 @@ export default function CharacterPanel({
             </Grid>
           </Box>
           <Divider />
-          <TableContainer sx={{ maxHeight: 500 }}>
+          <TableContainer sx={{ maxHeight: 600 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableBody>
                 <TableRow tabIndex={-1} key={1}>
@@ -59,7 +59,7 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
-                    ID
+                    <Typography variant="h6">Id</Typography>
                   </TableCell>
                   <TableCell
                     key={2}
@@ -83,7 +83,7 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
-                    NAME
+                    <Typography variant="h6">Name</Typography>
                   </TableCell>
                   <TableCell
                     key={2}
@@ -107,7 +107,7 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
-                    STATUS
+                    <Typography variant="h6">Status</Typography>
                   </TableCell>
                   <TableCell
                     key={2}
@@ -131,7 +131,7 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
-                    SPECIES
+                    <Typography variant="h6">Species</Typography>
                   </TableCell>
                   <TableCell
                     key={2}
@@ -155,7 +155,7 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
-                    TYPE
+                    <Typography variant="h6">Type</Typography>
                   </TableCell>
                   <TableCell
                     key={2}
@@ -179,7 +179,7 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
-                    GENDER
+                    <Typography variant="h6">Gender</Typography>
                   </TableCell>
                   <TableCell
                     key={2}
@@ -203,7 +203,7 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
-                    IMAGE
+                    <Typography variant="h6">Image</Typography>
                   </TableCell>
                   <TableCell
                     key={2}
@@ -231,7 +231,7 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
-                    CREATED
+                    <Typography variant="h6">Created</Typography>
                   </TableCell>
                   <TableCell
                     key={2}
