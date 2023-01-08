@@ -1,6 +1,7 @@
 import {
   Box,
   Divider,
+  Link,
   Paper,
   Stack,
   Table,
@@ -11,13 +12,22 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import searchSingleCharacter from "helpers/searchSingleCharacter";
 import SearchResult from "types/iSearchResult";
+import { CharacterInfo } from "types/iSingleCharacterSearchResult";
 
 interface Props {
   searchResults: SearchResult | null;
+  setCharacterPanel: React.Dispatch<React.SetStateAction<boolean>>;
+  setCharacterInfo: React.Dispatch<React.SetStateAction<CharacterInfo>>;
 }
 
-export default function ResultsPanel({ searchResults }: Props) {
+export default function ResultsPanel({
+  searchResults,
+  setCharacterPanel,
+  setCharacterInfo,
+}: Props) {
+  console.log(searchResults?.data);
   return (
     <>
       <Paper elevation={3} sx={{ marginTop: "20px" }}>
@@ -69,7 +79,21 @@ export default function ResultsPanel({ searchResults }: Props) {
                                 overflow: "hidden",
                               }}
                             >
-                              {character.name}
+                              <Link
+                                href="#"
+                                onClick={async (e) => {
+                                  e.preventDefault();
+                                  setCharacterInfo(
+                                    await searchSingleCharacter(
+                                      character.id,
+                                      character.name
+                                    )
+                                  );
+                                  setCharacterPanel(true);
+                                }}
+                              >
+                                {character.name}
+                              </Link>
                             </TableCell>
                           </TableRow>
                         );

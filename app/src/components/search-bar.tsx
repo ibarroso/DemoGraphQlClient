@@ -3,12 +3,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 import SearchResult from "types/iSearchResult";
-
-function sleep(delay = 0) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, delay);
-  });
-}
+import searchCharacter from "helpers/searchCharacter";
 
 interface Props {
   setSearchResults: React.Dispatch<React.SetStateAction<SearchResult>>;
@@ -19,40 +14,6 @@ export default function SearchBar({ setSearchResults }: Props) {
   const [options, setOptions] = React.useState<string[]>([]);
   const [searchPattern, setSearchPattern] = React.useState<string>("");
   const loading = open && options.length === 0;
-
-  const searchCharacter = async (
-    characterName: string
-  ): Promise<SearchResult> => {
-    var searchResult: SearchResult = {
-      data: { characters: { info: { count: 0, next: 0 }, results: [] } },
-    };
-    await fetch("https://rickandmortyapi.com/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `
-      query {
-        characters(filter: {name:"${characterName}"}) {
-          info {
-            count
-            pages
-          }
-          results {
-            name
-          }
-        }
-      }
-        `,
-      }),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        searchResult = result as SearchResult;
-      });
-    return searchResult;
-  };
 
   const refreshOptions = async (characterName: string): Promise<void> => {
     var result = await searchCharacter(characterName);
@@ -99,7 +60,7 @@ export default function SearchBar({ setSearchResults }: Props) {
       onInputChange={(event, newInputValue) => {
         console.log(newInputValue);
       }}
-      isOptionEqualToValue={(option, value) => option === value}
+      //isOptionEqualToValue={(option, value) => option === value}
       getOptionLabel={(option) => option}
       options={options}
       loading={loading}
@@ -109,9 +70,10 @@ export default function SearchBar({ setSearchResults }: Props) {
             if (e.key === "Enter") {
               setSearchResults(await searchCharacter(searchPattern));
             }
-            setSearchPattern("");
+
             setOpen(false);
           }}
+          onBlur={() => setSearchPattern("")}
           onChange={(e) => {
             setSearchPattern(e.target.value);
             setOpen(e.target.value.length > 0);
