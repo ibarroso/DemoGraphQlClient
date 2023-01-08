@@ -1,15 +1,16 @@
 interface Info {
   count: number;
-  pages: number;
+  next: number;
 }
 
-interface Name {
+interface CharacterData {
+  id: string;
   name: string;
 }
 
 interface Characters {
   info: Info;
-  results: Name[];
+  results: CharacterData[];
 }
 
 interface Data {

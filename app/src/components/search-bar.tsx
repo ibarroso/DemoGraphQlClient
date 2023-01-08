@@ -10,16 +10,54 @@ function sleep(delay = 0) {
   });
 }
 
-export default function SearchBar() {
+interface Props {
+  setSearchResults: React.Dispatch<React.SetStateAction<SearchResult>>;
+}
+
+export default function SearchBar({ setSearchResults }: Props) {
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<string[]>([]);
+  const [searchPattern, setSearchPattern] = React.useState<string>("");
   const loading = open && options.length === 0;
-  var searchResult: SearchResult = {
-    data: {
-      characters: { info: { count: 0, pages: 0 }, results: [{ name: "" }] },
-    },
+
+  const searchCharacter = async (
+    characterName: string
+  ): Promise<SearchResult> => {
+    var searchResult: SearchResult = {
+      data: { characters: { info: { count: 0, next: 0 }, results: [] } },
+    };
+    await fetch("https://rickandmortyapi.com/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+      query {
+        characters(filter: {name:"${characterName}"}) {
+          info {
+            count
+            pages
+          }
+          results {
+            name
+          }
+        }
+      }
+        `,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        searchResult = result as SearchResult;
+      });
+    return searchResult;
   };
-  var pattern: string = "";
+
+  const refreshOptions = async (characterName: string): Promise<void> => {
+    var result = await searchCharacter(characterName);
+    setOptions(result.data.characters.results.map((x) => x.name));
+  };
 
   React.useEffect(() => {
     let active = true;
@@ -28,41 +66,7 @@ export default function SearchBar() {
       return undefined;
     }
 
-    (async () => {
-      //await sleep(1e3);
-      console.log(pattern);
-      await fetch("https://rickandmortyapi.com/graphql", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-          query {
-            characters(filter: {name:"${pattern}"}) {
-              info {
-                count
-                pages
-              }
-              results {
-                name
-              }
-            }
-          }
-            `,
-        }),
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          searchResult = result as SearchResult;
-          console.log(searchResult.data.characters);
-          if (active) {
-            setOptions([
-              ...searchResult.data.characters.results.map((x) => x.name),
-            ]);
-          }
-        });
-    })();
+    if (active) refreshOptions(searchPattern);
 
     return () => {
       active = false;
@@ -79,11 +83,15 @@ export default function SearchBar() {
     <Autocomplete
       id="asynchronous-demo"
       open={open}
-      //onChange={(e) => setOpen(true)}
-      onKeyDown={(e) => console.log(e.key)}
-      /*       onOpen={(e) => {
-        setOpen(true);
-      }} */
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+        }
+        setOpen(false);
+      }}
+      onOpen={() => {
+        setOpen(searchPattern.length > 0);
+      }}
       onClose={() => {
         setOpen(false);
       }}
@@ -97,9 +105,15 @@ export default function SearchBar() {
       loading={loading}
       renderInput={(params) => (
         <TextField
+          onKeyDown={async (e) => {
+            if (e.key === "Enter") {
+              setSearchResults(await searchCharacter(searchPattern));
+            }
+            setSearchPattern("");
+            setOpen(false);
+          }}
           onChange={(e) => {
-            console.log(e.target.value);
-            pattern = e.target.value;
+            setSearchPattern(e.target.value);
             setOpen(e.target.value.length > 0);
           }}
           {...params}
