@@ -25,8 +25,11 @@ export default async function searchSingleCharacter(
             species
             type
             gender
+            origin{name}
+            location{name}
             image
             created
+            episode{episode}
           }
         }
       }

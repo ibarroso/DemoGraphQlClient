@@ -30,16 +30,17 @@ export default function ResultsPanel({
   return (
     <>
       <Paper elevation={3} sx={{ marginTop: "20px" }}>
-        <Stack>
-          <Box
-            sx={{
-              margin: "auto auto auto auto",
-            }}
-          >
-            <Typography variant="h3">Search Results</Typography>
-          </Box>
-          <Divider />
-          {searchResults && searchResults.length > 0 && (
+        {searchResults && searchResults.length > 0 && (
+          <Stack>
+            <Box
+              sx={{
+                margin: "auto auto auto auto",
+              }}
+            >
+              <Typography variant="h3">Search Results</Typography>
+            </Box>
+            <Divider />
+
             <TableContainer sx={{ maxHeight: 500 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -98,8 +99,8 @@ export default function ResultsPanel({
                 </TableBody>
               </Table>
             </TableContainer>
-          )}
-        </Stack>
+          </Stack>
+        )}
       </Paper>
     </>
   );

@@ -203,6 +203,54 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
+                    <Typography variant="h6">Origin</Typography>
+                  </TableCell>
+                  <TableCell
+                    key={2}
+                    align="left"
+                    style={{
+                      minWidth: 20,
+                      maxWidth: 200,
+                      overflow: "hidden",
+                    }}
+                  >
+                    {characterInfo.origin.name}
+                  </TableCell>
+                </TableRow>
+                <TableRow tabIndex={-1} key={8}>
+                  <TableCell
+                    key={1}
+                    align="left"
+                    style={{
+                      minWidth: 20,
+                      maxWidth: 200,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Typography variant="h6">Location</Typography>
+                  </TableCell>
+                  <TableCell
+                    key={2}
+                    align="left"
+                    style={{
+                      minWidth: 20,
+                      maxWidth: 200,
+                      overflow: "hidden",
+                    }}
+                  >
+                    {characterInfo.location.name}
+                  </TableCell>
+                </TableRow>
+                <TableRow tabIndex={-1} key={9}>
+                  <TableCell
+                    key={1}
+                    align="left"
+                    style={{
+                      minWidth: 20,
+                      maxWidth: 200,
+                      overflow: "hidden",
+                    }}
+                  >
                     <Typography variant="h6">Image</Typography>
                   </TableCell>
                   <TableCell
@@ -221,7 +269,7 @@ export default function CharacterPanel({
                     />
                   </TableCell>
                 </TableRow>
-                <TableRow tabIndex={-1} key={8}>
+                <TableRow tabIndex={-1} key={10}>
                   <TableCell
                     key={1}
                     align="left"
@@ -242,7 +290,33 @@ export default function CharacterPanel({
                       overflow: "hidden",
                     }}
                   >
-                    {characterInfo.created.toString()}
+                    {new Date(characterInfo.created).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+                <TableRow tabIndex={-1} key={11}>
+                  <TableCell
+                    key={1}
+                    align="left"
+                    style={{
+                      minWidth: 20,
+                      maxWidth: 200,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Typography variant="h6">Episodes</Typography>
+                  </TableCell>
+                  <TableCell
+                    key={2}
+                    align="left"
+                    style={{
+                      minWidth: 20,
+                      maxWidth: 200,
+                      overflow: "hidden",
+                    }}
+                  >
+                    {characterInfo.episode
+                      .map((e) => ` ${e.episode}`)
+                      .toString()}
                   </TableCell>
                 </TableRow>
               </TableBody>

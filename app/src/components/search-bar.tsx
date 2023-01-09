@@ -26,26 +26,12 @@ export default function SearchBar({
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState<CharacterInfo[]>([]);
   const [searchPattern, setSearchPattern] = React.useState<string>("");
-  const loading = open && options.length === 0;
+  const loading = open && options.length > 0;
 
   const refreshOptions = async (characterName: string): Promise<void> => {
     var result = await searchCharacters(characterName);
     setOptions(result);
   };
-
-  React.useEffect(() => {
-    let active = true;
-
-    if (!loading) {
-      return undefined;
-    }
-
-    if (active) refreshOptions(searchPattern);
-
-    return () => {
-      active = false;
-    };
-  }, [loading]);
 
   React.useEffect(() => {
     if (!open) {
@@ -58,20 +44,14 @@ export default function SearchBar({
       <Autocomplete
         id="asynchronous-demo"
         open={open}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-          }
-          setOpen(false);
-        }}
         onOpen={() => {
           setOpen(searchPattern.length > 0);
+          refreshOptions(searchPattern);
         }}
         onClose={() => {
           setOpen(false);
         }}
         fullWidth
-        onInputChange={() => {}}
         onChange={async (e, newInputValue) => {
           e.preventDefault();
           if (newInputValue) {
@@ -91,12 +71,14 @@ export default function SearchBar({
         loading={loading}
         renderInput={(params) => (
           <TextField
+            value={searchPattern}
             onKeyDown={async (e) => {
               if (e.key === "Enter") {
+                setOpen(false);
+                e.stopPropagation();
                 refApiCallUiFeedback.current?.OpenBackdrop();
                 setSearchResults(await searchAllCharacters(searchPattern));
                 refApiCallUiFeedback.current?.CloseBackdrop();
-                setOpen(false);
                 setCharacterPanel(false);
               }
             }}
@@ -104,6 +86,7 @@ export default function SearchBar({
             onChange={(e) => {
               setSearchPattern(e.target.value);
               setOpen(e.target.value.length > 0);
+              refreshOptions(e.target.value);
             }}
             {...params}
             label="Search Character"
